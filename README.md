@@ -27,7 +27,6 @@ Controls: WASD move, Shift sprint, C crouch, Space climb, Click or F attack, E i
 
 ## Docs
 
-- `DESIGN.md`: design record (locked, proposed and open decisions)
 - `tools/gen_audio.mjs`: regenerates audio (needs `FAL_KEY` in `.env`, see `.env.example`)
 - `tools/optimize_models.mjs`: shrinks generated GLBs for the web
 - `Assets/`: early Unity C# prototype, superseded by the Three.js build
