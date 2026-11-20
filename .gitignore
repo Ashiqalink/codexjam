@@ -1,0 +1,9 @@
+.env
+.env.*
+!.env.example
+node_modules/
+dist/
+shots/
+mockup/dist/
+assets_src/
+tools/fetch_models.mjs

@@ -1,0 +1,30 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>Mockup: intro shot 2</title>
+<style>
+  html, body { margin: 0; height: 100%; overflow: hidden; background: #000; }
+  canvas { display: block; }
+  .bar { position: fixed; left: 0; right: 0; height: 11vh; background: #000; z-index: 2; }
+  .top { top: 0; } .bottom { bottom: 0; }
+  .caption {
+    position: fixed; left: 0; right: 0; bottom: 3.2vh; z-index: 3; text-align: center;
+    font-family: "Arial Black", Impact, sans-serif; font-style: italic; font-size: 3.4vh;
+    color: #ffe14a; letter-spacing: 0.04em;
+    text-shadow: 0 0.35vh 0 #b4361f;
+  }
+  .skip {
+    position: fixed; right: 2.5vw; top: 3.6vh; z-index: 3;
+    font-family: "Arial Black", sans-serif; font-size: 1.6vh; color: #777; letter-spacing: 0.1em;
+  }
+</style>
+</head>
+<body>
+  <div class="bar top"></div>
+  <div class="bar bottom"></div>
+  <div class="skip">ANY KEY TO SKIP</div>
+  <div class="caption">You survived. Your luggage did not.</div>
+  <script type="module" src="./main.js"></script>
+</body>
+</html>
