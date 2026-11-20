@@ -64,7 +64,7 @@ export const audio = {
 
   update(dt) {
     if (!ctx) return;
-    if (input.pressed('KeyM')) { muted = !muted; master.gain.setTargetAtTime(muted ? 0 : 0.9, ctx.currentTime, 0.05); G.hud?.toast(muted ? 'Sound off' : 'Sound on', 'M to toggle', 1); }
+    if (input.pressed('KeyN')) { muted = !muted; master.gain.setTargetAtTime(muted ? 0 : 0.9, ctx.currentTime, 0.05); G.hud?.toast(muted ? 'Sound off' : 'Sound on', 'N to toggle', 1); }
     const p = G.player;
     if (!G.started) return;
     const inside = !!p.bld;

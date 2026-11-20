@@ -13,6 +13,7 @@ import { Hud } from './ui/hud.js';
 import { Cinema } from './systems/cinema.js';
 import { input } from './systems/input.js';
 import { updateInteract } from './systems/interact.js';
+import { updateMap } from './ui/map.js';
 import { setupStory, updateStory, introSequence, setStage } from './systems/story.js';
 import { loadAssets } from './core/assets.js';
 import { buildInstances } from './core/instancer.js';
@@ -100,6 +101,7 @@ async function boot() {
       G.rig.track(p.x, p.y, p.z, p.bld ? CFG.interiorSize : CFG.gameplaySize, dt);
     }
     G.hud.update(dt);
+    updateMap();
     audio.update(dt);
 
     for (const b of Object.values(G.buildings)) {

@@ -135,3 +135,12 @@ body.cine #hud, body.cine #markers { display: none; }
 #endcard .end-line { font-size: 20px; color: #bbb; max-width: 720px; }
 #endcard #end-stats { font-size: 16px; color: #ffd23f; letter-spacing: 0.05em; }
 #endcard .end-hint { margin-top: 18px; font-size: 13px; color: #888; letter-spacing: 0.2em; }
+
+/* ---------- Map ---------- */
+#map { position: fixed; inset: 0; z-index: 13; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(11, 26, 46, 0.7); }
+#map.hidden { display: none; }
+#map canvas { width: min(80vh, 90vw); height: min(80vh, 90vw); border: 6px solid #fff4d6; border-radius: 10px; box-shadow: 6px 6px 0 #2a1a12; transform: rotate(-1deg); }
+#map .map-title { font: italic 900 32px "Arial Black", Impact, sans-serif; color: #ffd23f; text-shadow: 3px 3px 0 #d9412b; margin-bottom: 10px; }
+#map .map-title span { font-size: 14px; color: #fff4d6; text-shadow: none; }
+#map-btn { position: fixed; right: 18px; top: 104px; z-index: 6; font: 900 15px "Arial Black", Impact, sans-serif; background: #ffd23f; color: #2a1a12; border: 3px solid #2a1a12; border-radius: 8px; padding: 8px 14px; box-shadow: 3px 3px 0 #2a1a12; transform: rotate(2deg); cursor: pointer; }
+body.cine #map-btn { display: none; }

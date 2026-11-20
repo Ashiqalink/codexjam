@@ -70,7 +70,8 @@ Standing makes you easier to spot. Sprinting makes noise. Crouching reduces guar
 | `Space` | Climb low obstacles |
 | `Click` or `F` | Attack or takedown |
 | `E` | Interact, loot, or blackmail |
-| `M` | Mute |
+| `M` or MAP button | Island map |
+| `N` | Mute |
 
 ## Gallery
 
