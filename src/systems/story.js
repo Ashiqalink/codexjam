@@ -6,6 +6,7 @@ import { STORY } from '../world/buildings.js';
 import { dossierIcon } from '../world/interactive.js';
 import { signMesh } from '../core/batch.js';
 import { overlaps, resolve } from '../core/collision.js';
+import { Npc, randomLook } from '../entities/npc.js';
 
 const DAY = { bg: '#7cc6de', hemi: 1.35, sun: 3.0 };
 let rain = null, wreckInfo = null;
@@ -22,11 +23,12 @@ export function setupStory(info) {
     }
   });
   G.on('vault', () => { if (t.stage <= 1) setStage(2); });
-  G.on('takedown', () => G.hud.toast('TAKEDOWN!', 'He was asking for it.', 1.6));
+  G.on('takedown', () => { G.state.takedowns = (G.state.takedowns || 0) + 1; G.hud.toast('TAKEDOWN!', 'He was asking for it.', 1.6); });
   G.on('secret', (id) => secretScene(id));
   G.on('blackmail', (b) => blackmailScene(b));
   G.on('hide', (spot) => toggleHide(spot));
   G.on('defeated', () => defeated());
+  G.on('finale', () => finale());
 }
 
 export function setStage(n) {
@@ -61,12 +63,17 @@ export function updateStory() {
 
 function refreshObjective() {
   const h = G.state.hijacked;
-  if (h.dmv && h.sanitation) G.hud.objective('Both beach offices are yours. The mid-island offices open in the next build.');
+  if (h.palace) G.hud.objective('You are the President. Enjoy the island. Nothing has changed.');
+  else if (h.tax && h.tower) G.hud.objective(`The Palace is open. ${STORY.palace.official} keeps his secrets on the top floor.`);
+  else if (h.dmv && h.sanitation) {
+    if (h.tax) G.hud.objective(`Now State TV. ${STORY.tower.official} runs the Propaganda Tower.`);
+    else if (h.tower) G.hud.objective(`Now the Tax Office. ${STORY.tax.official} has never paid for anything.`);
+    else G.hud.objective(`Mid-island is open. Blackmail ${STORY.tax.official} (Tax Office) and ${STORY.tower.official} (State TV).`);
+  }
   else if (h.dmv) G.hud.objective(`Now the Sanitation Dept. ${STORY.sanitation.official} has secrets too.`);
   else if (h.sanitation) G.hud.objective(`Now the DMV. ${STORY.dmv.official} has secrets too.`);
   else G.hud.objective('Dig up dirt on the DMV Director or the Sanitation Chief.');
 }
-
 // ---------------- Lighting moods ----------------
 function day() {
   G.scene.background.set(DAY.bg);
@@ -160,7 +167,7 @@ function secretScene(id) {
     shots: [
       {
         focus: () => [p.x, p.y + 1.6, p.z], size: 3.4, dur: 2.8,
-        caption: STORY[id].secret,
+        caption: STORY[id].secret, style: STORY[id].serious ? 'serious' : undefined,
         enter() { icon.position.set(p.x, p.y + 2.6, p.z); icon.quaternion.copy(G.rig.cam.quaternion); G.scene.add(icon); },
         update(t) { icon.position.y = p.y + 2.6 + Math.min(1, t * 3) * 0.3; },
       },
@@ -197,7 +204,7 @@ function blackmailScene(b) {
   const topY = b.floors * CFG.floorHeight;
   G.cine.play({
     shots: [
-      { focus: () => [off.x, off.y + 1.2, off.z], size: 3.2, dur: 2.6, caption: wasKO ? s.endorseKO : s.endorse, enter() { G.forceView = { bld: b, view: off.floor }; } },
+      { focus: () => [off.x, off.y + 1.2, off.z], size: 3.2, dur: 2.6, caption: wasKO ? s.endorseKO : s.endorse, style: s.serious ? 'serious' : undefined, enter() { G.forceView = { bld: b, view: off.floor }; } },
       {
         focus: [b.x + 2, topY - 2, b.z + b.d / 2], size: Math.max(b.w, b.d) * 0.6, dur: 3.0,
         caption: `Clout: ${G.state.clout}%`,
@@ -214,6 +221,7 @@ function blackmailScene(b) {
       G.hud.toast(`${b.name.toUpperCase()} HIJACKED`, s.perk, 4);
       refreshObjective();
       if (G.beachTierDone) G.emit('beachTierDone');
+      if (id === 'palace') finale();
     },
   });
 }
@@ -254,4 +262,85 @@ function defeated() {
     fade.classList.remove('on');
     G.hud.toast('You woke up on the beach.', 'Your wallet is lighter. Someone helped themselves.', 3.5);
   }, 900);
+}
+
+// ---------------- Finale: the election, then the twist ----------------
+function finale() {
+  const p = G.player, pal = G.buildings.palace, ship = wreckInfo.ship;
+  const fx = pal.x, fz = pal.z + pal.d / 2 + 2.2;
+  const [sx, sz] = LAYOUT.spawn;
+  let crowd = [], nobody = null, flash = 0;
+  G.state.clout = 100;
+  G.emit('clout');
+  G.cine.play({
+    shots: [
+      {
+        focus: [fx, 2, fz + 4], size: 16, dur: 3.4,
+        caption: 'ELECTION DAY. Candidates: 1. Turnout: 102%.',
+        enter() {
+          day();
+          p.setFloor(0, fx, fz, null); p.facing = 0; p.pose = 'cheer'; p.render();
+          for (let i = 0; i < 18; i++) {
+            const a = (i / 18) * Math.PI - Math.PI, r = 6 + (i % 3) * 1.6;
+            const n = new Npc({ x: fx + Math.cos(a) * r, z: fz + 2 - Math.sin(a) * r * 0.6, facing: Math.PI, look: randomLook(), pose: 'cheer' });
+            n.facing = Math.atan2(fx - n.x, fz - n.z); n.render();
+            crowd.push(n);
+          }
+        },
+      },
+      { focus: () => [p.x, 1.2, p.z], size: 4, dur: 3.0, caption: 'PRESIDENT NOBODY. 102% OF THE VOTE.' },
+      { focus: () => [p.x, 1.2, p.z], size: 4.4, dur: 3.2, style: 'serious', caption: 'The Director. The Chief. The Minister. The Anchor. Everyone kept their job.' },
+      { focus: [fx, 3, fz - 4], size: 15, dur: 3.2, style: 'serious', caption: 'No secret was ever made public. You need them now.' },
+      {
+        focus: () => [ship.position.x, 1.5, ship.position.z], size: 9, dur: 3.0, style: 'serious',
+        caption: 'Six months later. Another storm.',
+        enter() { night(); ship.visible = true; rain.visible = true; G.emit('storm'); },
+        update(t, dt) {
+          updateRain(dt, ship.position.x, ship.position.z);
+          const f = (t > 0.8 && t < 0.92) || (t > 1.9 && t < 2.0) ? 1 : 0;
+          if (f && !flash) G.emit('lightning');
+          flash = f;
+          G.hemi.intensity = f ? 3.2 : 0.6;
+          G.scene.background.set(f ? '#cfd8e8' : '#0b1a2e');
+        },
+      },
+      {
+        focus: [sx + 1, 0.3, sz + 1], size: 6, dur: 3.0, style: 'serious',
+        caption: 'Another nobody washes up.',
+        enter() {
+          G.emit('stormEnd'); day(); ship.visible = false; rain.visible = false;
+          nobody = new Npc({ x: sx + 1, z: sz + 1, facing: 0, look: randomLook(), pose: 'facedown' });
+        },
+      },
+      {
+        focus: [sx + 1, 0.8, sz + 1], size: 3.6, dur: 3.4, style: 'serious',
+        caption: 'He looks inland. Your face is on every wall.',
+        enter() { nobody.pose = 'sit'; nobody.facing = Math.atan2(pal.x - nobody.x, pal.z - nobody.z); nobody.render(); },
+      },
+    ],
+    end() {
+      G.emit('stormEnd'); day(); ship.visible = false; rain.visible = false;
+      for (const n of crowd) { n.pose = null; n.mode = 'wander'; n.area = { x1: fx - 14, z1: fz, x2: fx + 14, z2: fz + 12 }; }
+      if (nobody) { nobody.pose = 'sit'; nobody.render(); }
+      p.pose = null; p.render();
+      G.state.won = true;
+      refreshObjective();
+      endCard();
+    },
+  });
+}
+
+function endCard() {
+  const s = G.state;
+  const el = document.getElementById('endcard');
+  document.getElementById('end-stats').textContent =
+    `Cash: $${s.cash}   �   Offices hijacked: ${Object.keys(s.hijacked).length}/5   �   Takedowns: ${s.takedowns || 0}   �   Vote: 102%`;
+  el.classList.remove('hidden');
+  G.player.frozen = true;
+  const close = (e) => {
+    if (e.type === 'keydown' && e.key !== 'Enter') return;
+    el.classList.add('hidden'); G.player.frozen = false;
+    removeEventListener('keydown', close); el.removeEventListener('click', close);
+  };
+  setTimeout(() => { addEventListener('keydown', close); el.addEventListener('click', close); }, 800);
 }

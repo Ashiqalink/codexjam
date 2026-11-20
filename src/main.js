@@ -201,6 +201,7 @@ function debugStart(wreck) {
     }
     if (at === 'market' || at === 'village') setStage(4);
     if (d.has('cash')) G.state.cash = Number(d.get('cash'));
+    if (d.has('unlock')) { for (const k of ['dmv', 'sanitation', 'tax', 'tower']) G.state.hijacked[k] = true; G.state.clout = 80; }
     G.hud.refresh();
     G.rig.snap(p.x, p.y, p.z, Number(d.get('size')) || (p.bld ? CFG.interiorSize : CFG.gameplaySize));
     if (d.has('size')) { CFG.gameplaySize = CFG.interiorSize = Number(d.get('size')); }
@@ -209,7 +210,8 @@ function debugStart(wreck) {
       const off = b.official;
       p.setFloor(b.officialFloor, off.x, off.z + 2.7, b);
       setTimeout(() => {
-        if (d.get('demo') === 'secret') { G.state.secrets[b.id] = true; G.emit('secret', b.id); }
+        if (d.get('demo') === 'finale') G.emit('finale');
+        else if (d.get('demo') === 'secret') { G.state.secrets[b.id] = true; G.emit('secret', b.id); }
         else { G.state.secrets[b.id] = true; G.emit('blackmail', b); }
         const sh = G.cine.cur?.seq.shots;
         if (sh) for (const s of sh) s.dur *= Number(d.get('slow') || 4);

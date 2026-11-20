@@ -1,32 +1,96 @@
-# Coup d'État, Baby!
+<p align="center">
+  <img src="shots/i_wide.png" alt="Isla Corrupta" width="100%" />
+</p>
 
-Low-poly 2.5D stealth-brawler for a 12-hour game jam. A nobody washes up from a shipwreck, steals, digs up each politician's secrets and blackmails his way to the presidency.
+<h1 align="center">COUP D'ETAT, BABY!</h1>
 
-Built with Three.js (`WebGPURenderer`, WebGL2 fallback) and Vite. 3D models generated with Hyper3D Rodin, audio with fal (ElevenLabs sound effects, CassetteAI music).
+<p align="center">
+  <strong>A low-poly stealth-brawler about turning political secrets into power.</strong>
+</p>
 
-## Run
+<p align="center">
+  STEALTH-BRAWLER &nbsp; | &nbsp; 10-15 MINUTES &nbsp; | &nbsp; ONE VERY DIRTY ELECTION
+</p>
 
-```
+---
+
+## The pitch
+
+You wash up on **Isla Corrupta** with nothing but a flip-flop and an appetite for leverage. Raid guarded offices, uncover five officials' secrets, and blackmail your way to the presidency.
+
+Every takeover raises your clout. Campaign banners appear over captured buildings, new territory opens, and the route to the Palace gets shorter.
+
+<p align="center">
+  <img src="shots/intro1.png" alt="Shipwreck arrival" width="82%" />
+</p>
+
+## Judge's route
+
+| Start | Escalate | Win |
+| --- | --- | --- |
+| Follow the wreckage tutorial. | Hijack the DMV, Sanitation, Tax Office, and State TV. | Take the Palace and win with 102% of the vote. |
+
+The first targets unlock after reaching the market. A full run tells a complete story: shipwreck, campaign of blackmail, absurd election, and final sting.
+
+---
+
+## How it plays
+
+### Break in. Find dirt. Take over.
+
+1. Search wreckage, safes, and desks for cash.
+2. Sneak past guards, hide, climb, or take them down.
+3. Buy increasingly ridiculous weapons.
+4. Reach upper floors and recover a secret dossier.
+5. Confront the official, blackmail them, and claim their endorsement.
+
+Standing makes you easier to spot. Sprinting makes noise. Crouching reduces guard vision, while hiding spots let danger pass. Each office rewards a different piece of political leverage.
+
+<p align="center">
+  <img src="shots/a_san.png" alt="Infiltrating the Sanitation Department" width="82%" />
+</p>
+
+## Highlights
+
+| Stealth and combat | Political progression |
+| --- | --- |
+| Patrols, detection meters, hiding spots, climbing, melee, and takedowns. | Five officials, secret dossiers, campaign banners, clout, and a Palace finale. |
+| Loot and gear | Island atmosphere |
+| Safes, desks, crates, rubber chickens, stale baguettes, folding chairs, and golden briefcases. | Beaches, offices, market stalls, storms, crowds, music, and reactive sound. |
+
+---
+
+## Controls
+
+| Input | Action |
+| --- | --- |
+| `WASD` | Move |
+| `Shift` | Sprint |
+| `C` | Crouch |
+| `Space` | Climb low obstacles |
+| `Click` or `F` | Attack or takedown |
+| `E` | Interact, loot, or blackmail |
+| `M` | Mute |
+
+## Gallery
+
+| Market | Secret found |
+| --- | --- |
+| ![Island market](shots/a_market.png) | ![Secret dossier](shots/sec.png) |
+
+| Campaign takeover | Election finale |
+| --- | --- |
+| ![Blackmail scene](shots/bm.png) | ![Election finale](shots/fin.png) |
+
+---
+
+## Play locally
+
+```bash
 npm install
 npm run dev
 ```
 
-Open http://localhost:5173.
+Open `http://localhost:5173`.
 
-Controls: WASD move, Shift sprint, C crouch, Space climb, Click or F attack, E interact, M mute.
-
-## Debug URL options
-
-- `?skip` skip title and intro
-- `?at=market|dmv|sanitation|village|wreck` start in an area (`&floor=1` for upstairs)
-- `?shot=0..3` hold one intro shot
-- `?viewer=<asset>|all` preview generated models
-- `?test` run the scripted gameplay checks (results on screen and in the console)
-
-`node tools/run.mjs "<query>" shots/out.png` runs the build headlessly and saves a screenshot (needs `npm run build` first).
-
-## Docs
-
-- `tools/gen_audio.mjs`: regenerates audio (needs `FAL_KEY` in `.env`, see `.env.example`)
-- `tools/optimize_models.mjs`: shrinks generated GLBs for the web
-- `Assets/`: early Unity C# prototype, superseded by the Three.js build
+<p align="center"><sub>Created for a 12-hour game jam.</sub></p>
