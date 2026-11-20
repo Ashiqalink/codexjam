@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="shots/i_wide.png" alt="Isla Corrupta" width="100%" />
+  <img src="docs/img/i_wide.png" alt="Isla Corrupta" width="100%" />
 </p>
 
 <h1 align="center">COUP D'ETAT, BABY!</h1>
@@ -21,7 +21,7 @@ You wash up on **Isla Corrupta** with nothing but a flip-flop and an appetite fo
 Every takeover raises your clout. Campaign banners appear over captured buildings, new territory opens, and the route to the Palace gets shorter.
 
 <p align="center">
-  <img src="shots/intro1.png" alt="Shipwreck arrival" width="82%" />
+  <img src="docs/img/intro1.png" alt="Shipwreck arrival" width="82%" />
 </p>
 
 ## Judge's route
@@ -47,7 +47,7 @@ The first targets unlock after reaching the market. A full run tells a complete 
 Standing makes you easier to spot. Sprinting makes noise. Crouching reduces guard vision, while hiding spots let danger pass. Each office rewards a different piece of political leverage.
 
 <p align="center">
-  <img src="shots/a_san.png" alt="Infiltrating the Sanitation Department" width="82%" />
+  <img src="docs/img/a_san.png" alt="Infiltrating the Sanitation Department" width="82%" />
 </p>
 
 ## Highlights
@@ -76,11 +76,11 @@ Standing makes you easier to spot. Sprinting makes noise. Crouching reduces guar
 
 | Market | Secret found |
 | --- | --- |
-| ![Island market](shots/a_market.png) | ![Secret dossier](shots/sec.png) |
+| ![Island market](docs/img/a_market.png) | ![Secret dossier](docs/img/sec.png) |
 
 | Campaign takeover | Election finale |
 | --- | --- |
-| ![Blackmail scene](shots/bm.png) | ![Election finale](shots/fin.png) |
+| ![Blackmail scene](docs/img/bm.png) | ![Election finale](docs/img/fin.png) |
 
 ---
 
