@@ -10,6 +10,12 @@ export class Hud {
     this.el = $('hud');
     this.toastT = 0; this.tickerT = 0;
     this.shop = null;
+    this.shopPageSize = 9;
+    $('shop').addEventListener('wheel', (e) => {
+      if (!this.shop || !e.deltaY) return;
+      e.preventDefault();
+      this.scrollShop(Math.sign(e.deltaY));
+    }, { passive: false });
     this.sweat = document.createElement('div');
     this.sweat.className = 'sweat';
     this.sweat.innerHTML = '<div class="drop"><div class="fill"></div></div>';
@@ -68,7 +74,7 @@ export class Hud {
   }
 
   openShop(title, items) {
-    this.shop = { title, items, msg: '', fresh: true };
+    this.shop = { title, items, msg: '', fresh: true, page: 0 };
     G.player.frozen = true;
     this.drawShop();
     $('shop').classList.remove('hidden');
@@ -76,12 +82,28 @@ export class Hud {
 
   drawShop() {
     const s = this.shop;
+    const pages = Math.max(1, Math.ceil(s.items.length / this.shopPageSize));
+    s.page = Math.max(0, Math.min(s.page, pages - 1));
+    const start = s.page * this.shopPageSize;
+    const visible = s.items.slice(start, start + this.shopPageSize);
     $('shop-title').textContent = s.title;
-    $('shop-items').innerHTML = s.items.map((it, i) => `
+    $('shop-items').innerHTML = visible.map((it, i) => `
       <div class="shop-item ${it.equipped ? 'owned' : ''}">
         <div>${i + 1}. ${it.name}${it.desc ? `<small>${it.desc}</small>` : ''}</div>
         <div class="price">${it.equipped ? 'CURRENT' : it.owned ? 'OWNED' : '$' + it.price}</div>
       </div>`).join('') + (s.msg ? `<div class="shop-item"><div>${s.msg}</div></div>` : '');
+    const pageNote = pages > 1 ? ` Wheel: page ${s.page + 1}/${pages}.` : '';
+    $('shop-foot').textContent = `Press 1-${visible.length} to choose.${pageNote} E or Esc to leave.`;
+  }
+
+  scrollShop(delta) {
+    if (!this.shop) return;
+    const pages = Math.ceil(this.shop.items.length / this.shopPageSize);
+    const next = Math.max(0, Math.min(this.shop.page + delta, pages - 1));
+    if (next === this.shop.page) return;
+    this.shop.page = next;
+    this.shop.msg = '';
+    this.drawShop();
   }
 
   closeShop() {
@@ -96,9 +118,11 @@ export class Hud {
 
     if (this.shop && this.shop.fresh) { this.shop.fresh = false; }
     else if (this.shop) {
-      for (let i = 0; i < this.shop.items.length && i < 9; i++) {
+      const start = this.shop.page * this.shopPageSize;
+      const visible = this.shop.items.slice(start, start + this.shopPageSize);
+      for (let i = 0; i < visible.length; i++) {
         if (input.pressed('Digit' + (i + 1))) {
-          const it = this.shop.items[i];
+          const it = visible[i];
           this.shop.msg = it.buy() || '';
           // Rebuild the list so owned/equipped flags update.
           const fresh = this.shop.items.map((x) => x);

@@ -86,7 +86,7 @@ html, body { margin: 0; height: 100%; overflow: hidden; background: #000; user-s
 #shop {
   position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%) rotate(-1deg); width: 420px;
   background: var(--paper); border: 4px solid var(--ink); border-radius: 12px; box-shadow: 6px 8px 0 rgba(42,26,18,.6);
-  font-family: var(--font); color: var(--ink); padding: 14px 18px; z-index: 6;
+  font-family: var(--font); color: var(--ink); padding: 14px 18px; z-index: 6; touch-action: pan-y;
 }
 .shop-title { font-size: 26px; color: var(--red); margin-bottom: 8px; }
 .shop-item { display: flex; justify-content: space-between; padding: 6px 4px; border-bottom: 2px dashed #c9b48a; font-size: 17px; }
@@ -139,8 +139,21 @@ body.cine #hud, body.cine #markers { display: none; }
 /* ---------- Map ---------- */
 #map { position: fixed; inset: 0; z-index: 13; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(11, 26, 46, 0.7); }
 #map.hidden { display: none; }
-#map canvas { width: min(80vh, 90vw); height: min(80vh, 90vw); border: 6px solid #fff4d6; border-radius: 10px; box-shadow: 6px 6px 0 #2a1a12; transform: rotate(-1deg); }
+#map canvas { width: min(78vh, 90vw); height: min(78vh, 90vw); border: 6px solid #fff4d6; border-radius: 10px; box-shadow: 6px 6px 0 #2a1a12; transform: rotate(-1deg); }
 #map .map-title { font: italic 900 32px "Arial Black", Impact, sans-serif; color: #ffd23f; text-shadow: 3px 3px 0 #d9412b; margin-bottom: 10px; }
 #map .map-title span { font-size: 14px; color: #fff4d6; text-shadow: none; }
+.map-key { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 16px; max-width: min(78vh, 90vw); margin-top: 15px; color: #fff4d6; font: 700 12px Arial, sans-serif; text-shadow: 1px 1px 0 #2a1a12; }
+.map-key span { display: inline-flex; align-items: center; gap: 5px; }
+.map-key i { width: 12px; height: 12px; border: 2px solid #2a1a12; border-radius: 50%; display: inline-block; background: #fff; }
+.map-key .you { background: #fff; border-color: #d9412b; }
+.map-key .open { background: #3fb85c; }
+.map-key .locked { background: #7c8c8f; }
+.map-key .hijacked { background: #d9412b; }
 #map-btn { position: fixed; right: 18px; top: 104px; z-index: 6; font: 900 15px "Arial Black", Impact, sans-serif; background: #ffd23f; color: #2a1a12; border: 3px solid #2a1a12; border-radius: 8px; padding: 8px 14px; box-shadow: 3px 3px 0 #2a1a12; transform: rotate(2deg); cursor: pointer; }
 body.cine #map-btn { display: none; }
+#map { background: rgba(42, 26, 18, 0.72); }
+#map canvas { background: #fff4d6; padding: 10px; }
+#map-where { font: 900 15px "Arial Black", Impact, sans-serif; color: #fff4d6; margin-bottom: 8px; }
+#map .map-legend { margin-top: 12px; font: 900 13px "Arial Black", Impact, sans-serif; color: #fff4d6; display: flex; align-items: center; gap: 6px; }
+#map .lg { display: inline-block; width: 14px; height: 14px; border-radius: 50%; border: 2px solid #2a1a12; margin-left: 10px; }
+#map .lg.open { background: #3fb85c; } #map .lg.locked { background: #9aa0a6; } #map .lg.hij { background: #d9412b; } #map .lg.next { background: transparent; border: 3px solid #d9412b; }

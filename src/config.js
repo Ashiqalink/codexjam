@@ -4,6 +4,11 @@ export const CFG = {
   floorHeight: 4,
   wallHeight: 3.6,
 
+  // Lighting (override with ?hemi=&sun=&fill= for tuning).
+  hemi: 0.95,
+  sun: 3.6,
+  fill: 0.6,
+
   camPitch: 45,
   camYaw: 35,
   camDist: 120,

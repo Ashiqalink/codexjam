@@ -1,3 +1,4 @@
+import { overlaps } from './core/collision.js';
 import * as THREE from 'three/webgpu';
 import { G } from './core/game.js';
 import { CFG } from './config.js';
@@ -25,11 +26,14 @@ addEventListener('error', (e) => showErr(e.message + ' @ ' + (e.filename || '').
 addEventListener('unhandledrejection', (e) => showErr('Promise: ' + (e.reason?.stack || e.reason)));
 
 async function boot() {
+  for (const k of ['hemi', 'sun', 'fill']) if (G.debug.has(k)) CFG[k] = Number(G.debug.get(k));
   const renderer = new THREE.WebGPURenderer({ antialias: true });
   renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
   renderer.setSize(innerWidth, innerHeight);
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  renderer.toneMapping = THREE.NeutralToneMapping;
+  renderer.toneMappingExposure = 1.05;
   document.getElementById('app').appendChild(renderer.domElement);
   await renderer.init();
   G.renderer = renderer;
@@ -39,9 +43,15 @@ async function boot() {
   scene.background = new THREE.Color('#7cc6de');
   G.scene = scene;
 
-  G.hemi = new THREE.HemisphereLight('#cdeeff', '#e9c98f', 1.35);
+  // Light: warm key sun from the south-west, cool fill from the north-east, low sky fill.
+  // The two visible faces of every box get clearly different values, so shapes read.
+  G.hemi = new THREE.HemisphereLight('#bfe3ff', '#d9b47a', CFG.hemi);
   scene.add(G.hemi);
-  const sun = new THREE.DirectionalLight('#ffe3b8', 3.0);
+  const fill = new THREE.DirectionalLight('#b4cbf0', CFG.fill);
+  fill.position.set(30, 12, -14);
+  scene.add(fill);
+  G.fill = fill;
+  const sun = new THREE.DirectionalLight('#ffdcaa', CFG.sun);
   sun.castShadow = true;
   sun.shadow.mapSize.set(2048, 2048);
   sun.shadow.bias = -0.0005;
@@ -89,7 +99,7 @@ async function boot() {
     if (G.cine.active) {
       G.cine.update(dt);
       for (const n of G.npcs) n.update(dt);
-    } else if (G.started) {
+    } else if (G.started && !G.paused) {
       p.update(dt);
       stairCd -= dt;
       for (const b of Object.values(G.buildings)) if (b.update(dt, stairCd)) { stairCd = 0.4; G.rig.snap(p.x, p.y, p.z); }
@@ -112,7 +122,7 @@ async function boot() {
 
     // Sun follows the camera focus so shadows stay crisp near the action.
     const f = G.rig.focus;
-    sun.position.set(f.x - 24, f.y + 34, f.z + 18);
+    sun.position.set(f.x - 16, f.y + 34, f.z + 28);
     sun.target.position.copy(f);
 
     G.hud.markers(G.rig.cam);
@@ -122,6 +132,7 @@ async function boot() {
 
   addEventListener('resize', () => { renderer.setSize(innerWidth, innerHeight); G.rig.apply(); });
   window.__G = G;
+  window.__col = { overlaps };
   if (G.debug.has('test')) import('./debug/tests.js').then((m) => m.runTests()).catch((e) => showErr(e.stack));
 }
 

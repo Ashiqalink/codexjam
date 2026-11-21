@@ -101,7 +101,7 @@ export function buildIsland(scene) {
   reserve(...L.spawn, 12); reserve(...L.wreck, 14);
   reserve(...L.market, 18); reserve(...L.sanitation, 15); reserve(...L.dmv, 15);
   reserve(...L.tax, 14); reserve(...L.tower, 13); reserve(...L.palace, 26);
-  reserve(...L.village, 22); reserve(...L.bar, 8); reserve(...L.lighthouse, 5); reserve(...L.cove, 8);
+  reserve(...L.village, 31); reserve(...L.bar, 8); reserve(...L.lighthouse, 5); reserve(...L.cove, 8);
 
   // Roads.
   const mk = L.market;
@@ -118,8 +118,18 @@ export function buildIsland(scene) {
   const v = L.village;
   pr.church(b, v[0] - 14, v[1] - 6, 0.2);
   pr.waterTower(b, v[0] + 15, v[1] - 9);
-  const houseSpots = [[-10, 9, 0.1], [-4, 14, -0.15], [6, 12, 0.3], [12, 6, -0.4], [16, 14, 0.2], [-16, 12, 0.5], [9, -4, 1.6], [-7, -14, -0.2], [20, -2, 1.2], [-20, 2, -1.3]];
-  for (const [hx, hz, r] of houseSpots) pr.house(b, v[0] + hx, v[1] + hz, r, rnd);
+  const houseSpots = [
+    [-22, 17, 0.15, { w: 4.2, d: 3.6, h: 2.7, wall: '#f2b5a0', roof: '#c2543d' }],
+    [-8, 25, -0.2, { w: 5.8, d: 4.1, h: 3.2, wall: '#a8d8e0', roof: '#2f6d94' }],
+    [11, 22, 0.35, { w: 4.6, d: 5.2, h: 2.8, wall: '#f7d77a', roof: '#d98b3a' }],
+    [25, 13, -0.45, { w: 6.1, d: 3.8, h: 3.4, wall: '#cfe3b0', roof: '#7a4b3a' }],
+    [28, -3, 1.2, { w: 4.1, d: 4.8, h: 2.6, wall: '#f0c6dd', roof: '#c2543d' }],
+    [15, -17, 1.55, { w: 5.4, d: 3.5, h: 3.1, wall: '#f6e7c8', roof: '#2f6d94' }],
+    [-8, -22, -0.3, { w: 4.7, d: 4.3, h: 2.9, wall: '#a8d8e0', roof: '#d98b3a' }],
+    [-25, -10, -1.2, { w: 5.9, d: 3.7, h: 3.3, wall: '#f7d77a', roof: '#7a4b3a' }],
+    [-29, 4, -1.45, { w: 4.4, d: 5.1, h: 2.7, wall: '#f2b5a0', roof: '#c2543d' }],
+  ];
+  for (const [hx, hz, r, style] of houseSpots) pr.house(b, v[0] + hx, v[1] + hz, r, rnd, { ...style, prim: true });
   for (let i = 0; i < 5; i++) pr.flowers(b, v[0] - 8 + i * 4, v[1] + 3, rnd);
   pr.bench(b, v[0] + 3, v[1] + 2, 0);
   pr.bench(b, v[0] - 3, v[1] + 2, 0);
@@ -148,16 +158,11 @@ export function buildIsland(scene) {
   const pb = shorePoint(33, -12);
   pr.boat(b, pb[0], pb[1], 0.4, '#d9412b');
 
-  // Lighthouse.
+  // Lighthouse remains clear, so the beach stays readable.
   pr.lighthouse(b, ...L.lighthouse);
-  for (let i = 0; i < 6; i++) pr.rock(b, L.lighthouse[0] + (rnd() - 0.5) * 8, L.lighthouse[1] + (rnd() - 0.5) * 8, 0.5 + rnd(), rnd);
 
-  // Hidden cove: rocks and a small second wreck.
+  // Hidden cove: a small second wreck, without a ring of beach rocks.
   const cv = L.cove;
-  for (let i = 0; i < 10; i++) {
-    const a = rnd() * Math.PI * 2, rr = 5 + rnd() * 3;
-    pr.rock(b, cv[0] + Math.cos(a) * rr, cv[1] + Math.sin(a) * rr, 0.8 + rnd() * 1.2, rnd);
-  }
   pr.boat(b, cv[0] + 4, cv[1] + 1, 1.2, '#7c8c8f');
 
   // Scatter nature over the free land.
@@ -171,7 +176,7 @@ export function buildIsland(scene) {
     const roll = rnd();
     if (roll < (coast ? 0.55 : 0.3)) { pr.palm(b, x, z, rnd); palms++; reserve(x, z, 1.4); }
     else if (roll < 0.62) { pr.bush(b, x, z, 0.5 + rnd() * 0.6, rnd); reserve(x, z, 1.2); }
-    else if (roll < 0.74) { pr.rock(b, x, z, 0.3 + rnd() * 1.1, rnd); reserve(x, z, 1.5); }
+    else if (!coast && roll < 0.74) { pr.rock(b, x, z, 0.3 + rnd() * 1.1, rnd); reserve(x, z, 1.5); }
     else if (!coast && roll < 0.84) pr.flowers(b, x, z, rnd);
   }
 

@@ -8,7 +8,7 @@ import { signMesh } from '../core/batch.js';
 import { overlaps, resolve } from '../core/collision.js';
 import { Npc, randomLook } from '../entities/npc.js';
 
-const DAY = { bg: '#7cc6de', hemi: 1.35, sun: 3.0 };
+const DAY = { bg: '#7cc6de' };
 let rain = null, wreckInfo = null;
 
 export function setupStory(info) {
@@ -77,13 +77,13 @@ function refreshObjective() {
 // ---------------- Lighting moods ----------------
 function day() {
   G.scene.background.set(DAY.bg);
-  G.hemi.intensity = DAY.hemi; G.hemi.color.set('#cdeeff'); G.hemi.groundColor.set('#e9c98f');
-  G.sun.intensity = DAY.sun;
+  G.hemi.intensity = CFG.hemi; G.hemi.color.set('#bfe3ff'); G.hemi.groundColor.set('#d9b47a');
+  G.sun.intensity = CFG.sun; G.fill.intensity = CFG.fill;
 }
 function night() {
   G.scene.background.set('#0b1a2e');
   G.hemi.intensity = 0.6; G.hemi.color.set('#6f8fb8'); G.hemi.groundColor.set('#1b2a4a');
-  G.sun.intensity = 0;
+  G.sun.intensity = 0; G.fill.intensity = 0.25;
 }
 function wideShadows(on) {
   const s = G.sun.shadow.camera;

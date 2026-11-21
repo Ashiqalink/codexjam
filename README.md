@@ -58,6 +58,14 @@ Standing makes you easier to spot. Sprinting makes noise. Crouching reduces guar
 | Loot and gear | Island atmosphere |
 | Safes, desks, crates, rubber chickens, stale baguettes, folding chairs, and golden briefcases. | Beaches, offices, market stalls, storms, crowds, music, and reactive sound. |
 
+### The market never sleeps
+
+The market serves as Isla Corrupta's social hub: wandering locals circle eight stalls while vendors sell weapons, hairstyles, outfits, and coconut water. It is both a breather between infiltrations and the place where stolen cash becomes increasingly questionable equipment.
+
+<p align="center">
+  <img src="docs/img/g_market.png" alt="The busy Isla Corrupta market" width="82%" />
+</p>
+
 ---
 
 ## Controls
