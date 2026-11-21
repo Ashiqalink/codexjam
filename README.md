@@ -18,9 +18,7 @@
 
 Your ship has sunk. Your luggage is gone. Your dignity is somewhere off the coast, and you have washed up on **Isla Corrupta** with one flip-flop and a burning need for leverage.
 
-The island is run by five officials who are, to be generous, "not entirely above board". Break into their offices, find the dirt they hoped nobody would find, and politely suggest they endorse you. Politely means with a baguette.
-
-Every takeover raises your clout. Campaign banners sprout over captured buildings, the locals start whispering your name, and the road to the Palace gets shorter. You will win the presidency. The ballot count will not be discussed.
+Every takeover of government officials raises your clout.
 
 <p align="center">
   <img src="docs/img/intro1.png" alt="Shipwreck arrival" width="82%" />
