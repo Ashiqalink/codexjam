@@ -62,6 +62,11 @@ export class Player {
 
   get speedNow() { return this.crouch ? CFG.crouch : this.sprinting ? CFG.sprint : CFG.walk; }
 
+  setCrouch(on) {
+    this.crouch = on;
+    this.crouchK = on ? 1 : 0;
+  }
+
   update(dt) {
     this.t += dt;
     if (this.invuln > 0) this.invuln -= dt;
@@ -89,9 +94,13 @@ export class Player {
       return;
     }
 
-    if (input.pressed('KeyC')) this.crouch = !this.crouch;
+    if (input.pressed('KeyC')) {
+      this.setCrouch(!this.crouch);
+    }
     this.sprinting = input.down('ShiftLeft') || input.down('ShiftRight');
-    if (this.sprinting && this.crouch) this.crouch = false;
+    if (this.sprinting && this.crouch) {
+      this.setCrouch(false);
+    }
 
     this.moveStep(dt, 1);
 
@@ -156,7 +165,7 @@ export class Player {
       if (!overlaps(tx, tz, CFG.playerRadius * 0.9, this.floor, this.bld) && (this.floor > 0 || insideIsland(tx, tz))) {
         this.jump = { vault: true, t: 0, dur: 0.5, fx: this.x, fz: this.z, tx, tz, h: c.h + 0.35 };
         this.facing = Math.atan2(tx - this.x, tz - this.z);
-        this.crouch = false;
+        this.setCrouch(false);
         G.emit('vault', c);
         return;
       }
@@ -204,7 +213,6 @@ export class Player {
   render() {
     const m = this.mesh;
     if (this.heldName !== G.state.weapon) this.attachWeapon();
-    this.crouchK += ((this.crouch ? 1 : 0) - this.crouchK) * 0.25;
     if (!this.jump) this.y = this.floor * CFG.floorHeight;
     m.position.set(this.x, this.y, this.z);
     m.rotation.y = this.facing;

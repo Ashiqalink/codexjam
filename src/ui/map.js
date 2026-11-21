@@ -90,6 +90,70 @@ function draw() {
     x.fillStyle = col; x.fillText(txt, px, pz);
   };
   const tg = targets();
+  const civic = (b, state) => {
+    const [px, pz] = P(b.x, b.z);
+    const color = state === 'HIJACKED' || state === 'NEXT TARGET' ? '#d9412b' : state === 'LOCKED' ? '#737b83' : '#3f9e4f';
+    const s = b.id === 'palace' ? 21 : b.id === 'tower' ? 16 : 14;
+    const captionColor = state === 'NEXT TARGET' ? '#d9412b' : '#5a4a3a';
+    const poly = (points, fill = '#f7edd7') => {
+      x.beginPath();
+      points.forEach(([dx, dz], i) => i ? x.lineTo(px + dx, pz + dz) : x.moveTo(px + dx, pz + dz));
+      x.closePath(); x.fillStyle = fill; x.fill(); x.strokeStyle = color; x.lineWidth = 2.5; x.stroke();
+    };
+    const stroke = (draw, width = 2.5) => {
+      x.save(); x.translate(px, pz); x.strokeStyle = color; x.lineWidth = width; x.lineCap = 'round'; x.lineJoin = 'round'; draw(); x.restore();
+    };
+
+    if (state === 'NEXT TARGET') {
+      x.save(); x.strokeStyle = color; x.lineWidth = 2; x.setLineDash([5, 4]);
+      x.beginPath(); x.arc(px, pz, s + 8, 0, Math.PI * 2); x.stroke(); x.restore();
+    }
+
+    if (b.id === 'dmv') {
+      // A stamped seal, not a rooftop: the place that turns every person into a number.
+      const pts = Array.from({ length: 16 }, (_, i) => {
+        const a = (i / 16) * Math.PI * 2 - Math.PI / 2, r = i % 2 ? s * 0.82 : s;
+        return [Math.cos(a) * r, Math.sin(a) * r];
+      });
+      poly(pts);
+      stroke(() => { x.beginPath(); x.arc(0, 0, s * 0.48, 0, Math.PI * 2); x.stroke(); x.beginPath(); x.moveTo(-5, -3); x.lineTo(5, -3); x.moveTo(-5, 3); x.lineTo(3, 3); x.stroke(); }, 2);
+    } else if (b.id === 'sanitation') {
+      // Three blunt arrows create a refuse/recycling mark without another box on the map.
+      for (let i = 0; i < 3; i++) {
+        x.save(); x.translate(px, pz); x.rotate((i * Math.PI * 2) / 3);
+        x.fillStyle = '#f7edd7'; x.strokeStyle = color; x.lineWidth = 2.5; x.lineJoin = 'round';
+        x.beginPath(); x.moveTo(0, -s); x.lineTo(s * 0.42, -2); x.lineTo(s * 0.08, -2); x.lineTo(s * 0.08, s * 0.64); x.lineTo(-s * 0.25, s * 0.2); x.lineTo(-s * 0.25, -2); x.closePath(); x.fill(); x.stroke();
+        x.restore();
+      }
+    } else if (b.id === 'tax') {
+      // A set of scales makes the office read as an institution, not a house footprint.
+      stroke(() => {
+        x.beginPath(); x.moveTo(0, -s); x.lineTo(0, s * 0.78); x.moveTo(-s, -s * 0.48); x.lineTo(s, -s * 0.48); x.moveTo(-s * 0.72, s * 0.78); x.lineTo(s * 0.72, s * 0.78); x.stroke();
+        for (const side of [-1, 1]) { x.beginPath(); x.moveTo(side * s * 0.68, -s * 0.46); x.lineTo(side * s * 0.88, s * 0.25); x.lineTo(side * s * 0.46, s * 0.25); x.closePath(); x.stroke(); }
+      }, 3);
+      x.fillStyle = '#f7edd7'; x.beginPath(); x.arc(px, pz - s * 0.48, 3, 0, Math.PI * 2); x.fill();
+    } else if (b.id === 'tower') {
+      // Broadcast mast and signal arcs retain a tall, directional landmark at a glance.
+      poly([[0, -s], [s * 0.4, s * 0.72], [0, s * 0.38], [-s * 0.4, s * 0.72]]);
+      stroke(() => {
+        x.beginPath(); x.moveTo(0, -s * 0.68); x.lineTo(0, s * 0.52); x.stroke();
+        for (const r of [s * 0.62, s * 0.98]) {
+          x.beginPath(); x.arc(0, -s * 0.52, r, -0.78, 0.78); x.stroke();
+          x.beginPath(); x.arc(0, -s * 0.52, r, Math.PI - 0.78, Math.PI + 0.78); x.stroke();
+        }
+      }, 2);
+    } else {
+      // The Palace is a dome and colonnade: broad authority without a giant square block.
+      stroke(() => {
+        x.beginPath(); x.arc(0, 2, s * 0.76, Math.PI, 0); x.lineTo(s * 0.92, s * 0.7); x.lineTo(-s * 0.92, s * 0.7); x.closePath(); x.fillStyle = '#f7edd7'; x.fill(); x.stroke();
+        for (const dx of [-s * 0.48, -s * 0.16, s * 0.16, s * 0.48]) { x.beginPath(); x.moveTo(dx, 1); x.lineTo(dx, s * 0.62); x.stroke(); }
+        x.beginPath(); x.moveTo(-s, s * 0.72); x.lineTo(s, s * 0.72); x.stroke();
+      }, 2.8);
+    }
+
+    label(b.name.toUpperCase(), px, pz - s - 12, 14);
+    label(state, px, pz + s + 18, 10, captionColor);
+  };
   const roof = (wx, wz, ww, wd, color, name = '', sub = '') => {
     const [px, pz] = P(wx, wz), bw = ww * S, bd = wd * S;
     x.fillStyle = '#f7edd7'; x.fillRect(px - bw / 2, pz - bd / 2, bw, bd);
@@ -117,7 +181,7 @@ function draw() {
   for (const b of Object.values(G.buildings)) {
     const h = G.state.hijacked[b.id], locked = !!b.lockText?.();
     const state = tg.includes(b.id) ? 'NEXT TARGET' : h ? 'HIJACKED' : locked ? 'LOCKED' : 'OPEN';
-    roof(b.x, b.z, b.w, b.d, h ? '#d9412b' : locked ? '#9aa0a6' : b.id === 'palace' ? '#e2b93b' : '#3fb85c', b.name.toUpperCase(), state);
+    civic(b, state);
   }
 
   const p = G.player; if (!p) return;

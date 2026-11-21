@@ -229,7 +229,7 @@ function blackmailScene(b) {
 function toggleHide(spot) {
   const p = G.player;
   if (!p.hidden) {
-    p.hidden = true; p.hideSpot = spot; p.x = spot.x; p.z = spot.z; p.vx = p.vz = 0; p.crouch = false;
+    p.hidden = true; p.hideSpot = spot; p.x = spot.x; p.z = spot.z; p.vx = p.vz = 0; p.setCrouch(false);
     G.hud.toast('Hidden.', 'It smells like a campaign promise.', 1.4);
   } else {
     p.hidden = false;
@@ -251,7 +251,7 @@ function defeated() {
   setTimeout(() => {
     const [sx, sz] = LAYOUT.spawn;
     const p = G.player;
-    p.hidden = false; p.jump = null; p.crouch = false;
+    p.hidden = false; p.jump = null; p.setCrouch(false);
     p.setFloor(0, sx + 1.5, sz + 1.5, null);
     G.state.hearts = CFG.hearts;
     G.state.cash = Math.floor(G.state.cash / 2);

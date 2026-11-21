@@ -35,14 +35,26 @@ export function makeCharacter(look) {
   root.add(body);
   const bw = 0.56 + L.belly * 0.2, bd = 0.32 + L.belly * 0.24;
 
-  const legs = [];
+  const legs = [], knees = [], ankles = [];
   for (const s of [-1, 1]) {
     const hip = new THREE.Group();
     hip.position.set(s * 0.14, 0.8, 0);
     body.add(hip);
-    box(hip, 0.21, 0.68, 0.23, L.pants, 0, -0.34, 0);
-    box(hip, 0.23, 0.12, 0.32, L.shoes, 0, -0.74, 0.04);
+
+    // Separate joints make a true crouch possible: thigh folds at the hip,
+    // shin folds at the knee, and the shoe stays level at the ankle.
+    box(hip, 0.21, 0.4, 0.23, L.pants, 0, -0.2, 0);
+    const knee = new THREE.Group();
+    knee.position.set(0, -0.38, 0);
+    hip.add(knee);
+    box(knee, 0.2, 0.34, 0.22, L.pants, 0, -0.17, 0);
+    const ankle = new THREE.Group();
+    ankle.position.set(0, -0.32, 0);
+    knee.add(ankle);
+    box(ankle, 0.23, 0.12, 0.32, L.shoes, 0, -0.06, 0.04);
     legs.push(hip);
+    knees.push(knee);
+    ankles.push(ankle);
   }
 
   // Torso pivots at the hips, so leaning and slumping bend the upper body.
@@ -89,7 +101,7 @@ export function makeCharacter(look) {
     box(head, 0.41, 0.06, 0.41, L.hatBand || '#d9412b', 0, 0.47, 0);
   }
 
-  root.userData.parts = { body, torso, head, legs, arms };
+  root.userData.parts = { body, torso, head, legs, knees, ankles, arms };
   return root;
 }
 
@@ -116,13 +128,15 @@ function addHair(head, style, c) {
  * Pose and animate. s: { move 0..1, phase, crouch 0..1, attack 0..1, pose }
  */
 export function animate(ch, s) {
-  const { body, torso, head, legs, arms } = ch.userData.parts;
+  const { body, torso, head, legs, knees, ankles, arms } = ch.userData.parts;
   body.position.set(0, 0, 0);
   body.rotation.set(0, 0, 0);
   body.scale.set(1, 1, 1);
   torso.rotation.set(0, 0, 0);
   head.rotation.set(0, 0, 0);
   for (const l of legs) l.rotation.set(0, 0, 0);
+  for (const k of knees) k.rotation.set(0, 0, 0);
+  for (const a of ankles) a.rotation.set(0, 0, 0);
   for (const a of arms) a.rotation.set(0, 0, 0);
 
   const pose = s.pose || 'stand';
@@ -174,13 +188,17 @@ export function animate(ch, s) {
 
   const c = s.crouch || 0;
   if (c > 0) {
-    body.position.y -= 0.32 * c;
-    legs[0].rotation.x += -0.9 * c; legs[1].rotation.x += -0.9 * c;
-    // Knees bend: counter-rotate by shifting body forward a bit.
-    body.position.z = -0.1 * c;
-    torso.rotation.x += 0.55 * c;
-    head.rotation.x -= 0.4 * c;
-    arms[0].rotation.x -= 0.4 * c; arms[1].rotation.x -= 0.4 * c;
+    // Hips drop into the folded legs. Counter-rotated ankles keep shoes flat.
+    body.position.y -= 0.25 * c;
+    body.position.z = -0.12 * c;
+    for (let i = 0; i < legs.length; i++) {
+      legs[i].rotation.x -= 1.0 * c;
+      knees[i].rotation.x += 1.65 * c;
+      ankles[i].rotation.x -= 0.65 * c;
+    }
+    torso.rotation.x += 0.48 * c;
+    head.rotation.x -= 0.2 * c;
+    arms[0].rotation.x -= 0.58 * c; arms[1].rotation.x -= 0.58 * c;
   }
 
   const a = s.attack || 0;
