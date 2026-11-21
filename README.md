@@ -60,14 +60,6 @@ Standing makes you easier to spot. Sprinting makes noise. Crouching shrinks guar
   <img src="docs/img/sanitation.png" alt="Sneaking past a guard at the Sanitation Department" width="82%" />
 </p>
 
-## Highlights
-
-| Stealth and combat | Political progression |
-| --- | --- |
-| Patrols, detection meters, hiding spots, climbing, melee, and takedowns. Guards say "huh?" a lot. | Five officials, secret dossiers, campaign banners, clout, and a Palace finale. |
-| Loot and gear | Island atmosphere |
-| Safes, desks, crates, rubber chickens, stale baguettes, folding chairs, and golden briefcases. | Beaches, offices, market stalls, storms, crowds, music, and reactive sound. |
-
 ### The market never sleeps
 
 The market is Isla Corrupta's social hub. Locals circle eight stalls while vendors sell weapons, hairstyles, outfits, and coconut water. It is a breather between break-ins, and the place where stolen cash becomes questionable equipment.
