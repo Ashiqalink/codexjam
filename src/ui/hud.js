@@ -10,12 +10,11 @@ export class Hud {
     this.el = $('hud');
     this.toastT = 0; this.tickerT = 0;
     this.shop = null;
-    this.shopPageSize = 9;
-    $('shop').addEventListener('wheel', (e) => {
-      if (!this.shop || !e.deltaY) return;
-      e.preventDefault();
-      this.scrollShop(Math.sign(e.deltaY));
-    }, { passive: false });
+    // Click an item to buy it. The list itself scrolls natively (mouse wheel / touch).
+    $('shop-items').addEventListener('click', (e) => {
+      const row = e.target.closest('[data-i]');
+      if (row && this.shop) this.buyShop(Number(row.dataset.i));
+    });
     this.sweat = document.createElement('div');
     this.sweat.className = 'sweat';
     this.sweat.innerHTML = '<div class="drop"><div class="fill"></div></div>';
@@ -74,38 +73,35 @@ export class Hud {
   }
 
   openShop(title, items) {
-    this.shop = { title, items, msg: '', fresh: true, page: 0 };
+    this.shop = { title, items, msg: '', fresh: true, sel: 0 };
     G.player.frozen = true;
     this.drawShop();
     $('shop').classList.remove('hidden');
+    $('shop-items').scrollTop = 0;
   }
 
   drawShop() {
     const s = this.shop;
-    const pages = Math.max(1, Math.ceil(s.items.length / this.shopPageSize));
-    s.page = Math.max(0, Math.min(s.page, pages - 1));
-    const start = s.page * this.shopPageSize;
-    const visible = s.items.slice(start, start + this.shopPageSize);
+    s.sel = Math.max(0, Math.min(s.sel, s.items.length - 1));
     $('shop-title').textContent = s.title;
-    $('shop-items').innerHTML = visible.map((it, i) => `
-      <div class="shop-item ${it.equipped ? 'owned' : ''}">
-        <div>${i + 1}. ${it.name}${it.desc ? `<small>${it.desc}</small>` : ''}</div>
+    $('shop-items').innerHTML = s.items.map((it, i) => `
+      <div class="shop-item ${it.equipped ? 'owned' : ''} ${i === s.sel ? 'sel' : ''}" data-i="${i}">
+        <div>${i < 9 ? i + 1 + '. ' : ''}${it.name}${it.desc ? `<small>${it.desc}</small>` : ''}</div>
         <div class="price">${it.equipped ? 'CURRENT' : it.owned ? 'OWNED' : '$' + it.price}</div>
-      </div>`).join('') + (s.msg ? `<div class="shop-item"><div>${s.msg}</div></div>` : '');
-    const pageNote = pages > 1 ? ` Wheel: page ${s.page + 1}/${pages}.` : '';
-    $('shop-foot').textContent = `Press 1-${visible.length} to choose.${pageNote} E or Esc to leave.`;
+      </div>`).join('');
+    $('shop-msg').textContent = s.msg || '';
+    $('shop-foot').textContent = 'Scroll or W/S to browse. ENTER, click or 1-9 to choose. E or Esc to leave.';
+    $('shop-items').querySelector('.sel')?.scrollIntoView({ block: 'nearest' });
   }
 
-  scrollShop(delta) {
-    if (!this.shop) return;
-    const pages = Math.ceil(this.shop.items.length / this.shopPageSize);
-    const next = Math.max(0, Math.min(this.shop.page + delta, pages - 1));
-    if (next === this.shop.page) return;
-    this.shop.page = next;
-    this.shop.msg = '';
+  buyShop(i) {
+    const it = this.shop?.items[i];
+    if (!it) return;
+    this.shop.sel = i;
+    this.shop.msg = it.buy() || '';
+    this.refreshShopFlags();
     this.drawShop();
   }
-
   closeShop() {
     this.shop = null;
     G.player.frozen = false;
@@ -118,19 +114,11 @@ export class Hud {
 
     if (this.shop && this.shop.fresh) { this.shop.fresh = false; }
     else if (this.shop) {
-      const start = this.shop.page * this.shopPageSize;
-      const visible = this.shop.items.slice(start, start + this.shopPageSize);
-      for (let i = 0; i < visible.length; i++) {
-        if (input.pressed('Digit' + (i + 1))) {
-          const it = visible[i];
-          this.shop.msg = it.buy() || '';
-          // Rebuild the list so owned/equipped flags update.
-          const fresh = this.shop.items.map((x) => x);
-          this.shop.items = fresh;
-          this.refreshShopFlags();
-          this.drawShop();
-        }
-      }
+      const s = this.shop;
+      const step = (input.pressed('KeyS') || input.pressed('ArrowDown') ? 1 : 0) - (input.pressed('KeyW') || input.pressed('ArrowUp') ? 1 : 0);
+      if (step) { s.sel = (s.sel + step + s.items.length) % s.items.length; this.drawShop(); }
+      if (input.pressed('Enter') || input.pressed('Space')) this.buyShop(s.sel);
+      for (let i = 0; i < Math.min(9, s.items.length); i++) if (input.pressed('Digit' + (i + 1))) this.buyShop(i);
       if (input.pressed('Escape') || input.pressed('KeyE')) this.closeShop();
     }
   }

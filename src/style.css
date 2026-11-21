@@ -157,3 +157,14 @@ body.cine #map-btn { display: none; }
 #map .map-legend { margin-top: 12px; font: 900 13px "Arial Black", Impact, sans-serif; color: #fff4d6; display: flex; align-items: center; gap: 6px; }
 #map .lg { display: inline-block; width: 14px; height: 14px; border-radius: 50%; border: 2px solid #2a1a12; margin-left: 10px; }
 #map .lg.open { background: #3fb85c; } #map .lg.locked { background: #9aa0a6; } #map .lg.hij { background: #d9412b; } #map .lg.next { background: transparent; border: 3px solid #d9412b; }
+
+/* Scrollable shop list */
+#shop-items { max-height: min(52vh, 420px); overflow-y: auto; overscroll-behavior: contain; padding-right: 6px; scrollbar-width: thin; scrollbar-color: #d9412b #f1e2c0; }
+#shop-items::-webkit-scrollbar { width: 8px; }
+#shop-items::-webkit-scrollbar-thumb { background: #d9412b; border-radius: 4px; }
+#shop-items::-webkit-scrollbar-track { background: #f1e2c0; }
+.shop-item { cursor: pointer; }
+.shop-item:hover { background: #fff4d6; }
+.shop-item.sel { background: #ffd23f; outline: 2px solid #2a1a12; }
+#shop-msg { min-height: 1em; margin-top: 8px; font-size: 14px; color: #d9412b; }
+.shop-item.sel.owned { opacity: 0.85; }
