@@ -20,3 +20,5 @@ tools/fetch_models.mjs
 DESIGN.md
 CINEMATICS.md
 dist-pt/
+*.md
+!README.md
