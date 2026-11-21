@@ -3,7 +3,7 @@ import { G } from '../core/game.js';
 import { Batch, BOX } from '../core/batch.js';
 import { addBox } from '../core/collision.js';
 import { LAYOUT, insideIsland } from './island.js';
-import { Xf, rock, palm, crate, plank, barrel, bush, CYL8, CYL6 } from './props.js';
+import { Xf, palm, crate, plank, barrel, bush, CYL8, CYL6 } from './props.js';
 import { makeLoot } from './interactive.js';
 import { Guard } from '../entities/guard.js';
 import { place } from '../core/instancer.js';
@@ -38,20 +38,12 @@ export function buildWreck(scene) {
   const outward = Math.atan2(wx - sx, wz - sz);
   if (!place('shipwreck', wx, -0.9, wz, outward + 1.2, 1, [0.12, -0.3])) hull(b, wx, wz, outward + 1.2, -0.5, true);
 
-  // Exit faces the market. Rocks ring the landing spot; a fallen hull plank fills the gap.
+  // Exit faces the market, marked by a fallen hull plank.
   const dx = mx - sx, dz = mz - sz, dl = Math.hypot(dx, dz);
   const dir = [dx / dl, dz / dl];
   const perp = [-dir[1], dir[0]];
   const R = 9.5;
-  const dirA = Math.atan2(dir[1], dir[0]);
   const rnd = mulberry(7);
-  for (let a = 0; a < Math.PI * 2; a += 0.13) {
-    let da = a - dirA; while (da > Math.PI) da -= Math.PI * 2; while (da < -Math.PI) da += Math.PI * 2;
-    if (Math.abs(da) < 0.23) continue;
-    const x = sx + Math.cos(a) * R, z = sz + Math.sin(a) * R;
-    if (!insideIsland(x, z, -4)) continue;
-    rock(b, x, z, 0.75 + rnd() * 0.35, rnd);
-  }
   const gx = sx + dir[0] * R, gz = sz + dir[1] * R;
   const gateRot = Math.atan2(-perp[1], perp[0]);
   const gt = new Xf(b, gx, gz, gateRot);

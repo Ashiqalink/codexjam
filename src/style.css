@@ -139,7 +139,8 @@ body.cine #hud, body.cine #markers { display: none; }
 /* ---------- Map ---------- */
 #map { position: fixed; inset: 0; z-index: 13; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(11, 26, 46, 0.7); }
 #map.hidden { display: none; }
-#map canvas { width: min(78vh, 90vw); height: min(78vh, 90vw); border: 6px solid #fff4d6; border-radius: 10px; box-shadow: 6px 6px 0 #2a1a12; transform: rotate(-1deg); }
+#map canvas { width: min(78vh, 90vw); height: min(78vh, 90vw); border: 6px solid #fff4d6; border-radius: 10px; box-shadow: 6px 6px 0 #2a1a12; transform: perspective(1100px) rotateX(22deg) scale(0.92); transition: transform 0.12s ease-out; }
+#map { perspective-origin: 50% 40%; }
 #map .map-title { font: italic 900 32px "Arial Black", Impact, sans-serif; color: #ffd23f; text-shadow: 3px 3px 0 #d9412b; margin-bottom: 10px; }
 #map .map-title span { font-size: 14px; color: #fff4d6; text-shadow: none; }
 .map-key { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 16px; max-width: min(78vh, 90vw); margin-top: 15px; color: #fff4d6; font: 700 12px Arial, sans-serif; text-shadow: 1px 1px 0 #2a1a12; }
