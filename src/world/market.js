@@ -35,35 +35,37 @@ export function buildMarket(scene) {
 
   // Weapon stall.
   const ws = spots[2];
-  stall(b, ws.x, ws.z, ws.rot, ['#2a1a12', '#ffd23f'], 'none', rnd, false);
-  const wt = new Xf(b, ws.x, ws.z, ws.rot);
-  wt.box(-0.9, 1.0, 0.5, 0.5, 0.12, 0.2, '#ffd23f');      // chicken
-  wt.box(0.0, 1.0, 0.5, 1.0, 0.1, 0.12, '#d9a441');        // baguette
-  wt.box(0.9, 1.0, 0.5, 0.5, 0.5, 0.06, '#9c9c9c');        // chair
+  if (!stall(b, ws.x, ws.z, ws.rot, ['#2a1a12', '#ffd23f'], 'none', rnd, false, 'weapons')) {
+    const wt = new Xf(b, ws.x, ws.z, ws.rot);
+    wt.box(-0.9, 1.0, 0.5, 0.5, 0.12, 0.2, '#ffd23f');      // chicken
+    wt.box(0.0, 1.0, 0.5, 1.0, 0.1, 0.12, '#d9a441');        // baguette
+    wt.box(0.9, 1.0, 0.5, 0.5, 0.5, 0.06, '#9c9c9c');        // chair
+  }
   vendorAt(ws.x, ws.z, ws.rot, rnd, { shirt: '#2a1a12', glasses: true, hat: '#2a1a12' });
   shopSign(ws, 'NOT GUNS');
   register({ ...front(ws), r: 2.2, label: () => 'Browse: melee "goods"', use: () => openWeapons() });
 
   // Barber.
   const bs = spots[5];
-  stall(b, bs.x, bs.z, bs.rot, ['#d9412b', '#fff4d6'], 'none', rnd, false);
-  const bt = new Xf(b, bs.x, bs.z, bs.rot);
-  for (let i = 0; i < 6; i++) bt.box(1.7, i * 0.4, 0.9, 0.2, 0.4, 0.2, i % 2 ? '#d9412b' : '#f6f1e9');
-  bt.box(0, 0, 1.8, 0.8, 0.5, 0.8, '#2f6d94');
+  if (!stall(b, bs.x, bs.z, bs.rot, ['#d9412b', '#fff4d6'], 'none', rnd, false, 'barber')) {
+    const bt = new Xf(b, bs.x, bs.z, bs.rot);
+    for (let i = 0; i < 6; i++) bt.box(1.7, i * 0.4, 0.9, 0.2, 0.4, 0.2, i % 2 ? '#d9412b' : '#f6f1e9');
+    bt.box(0, 0, 1.8, 0.8, 0.5, 0.8, '#2f6d94');
+  }
   vendorAt(bs.x, bs.z, bs.rot, rnd, { shirt: '#f6f1e9', mustache: '#1b120d', hairStyle: 4 });
   shopSign(bs, 'BARBER');
   register({ ...front(bs), r: 2.2, label: () => 'Get a haircut', use: () => openBarber() });
 
   // Tailor.
   const ts = spots[6];
-  stall(b, ts.x, ts.z, ts.rot, ['#b05bd6', '#fff4d6'], 'cloth', rnd, false);
+  stall(b, ts.x, ts.z, ts.rot, ['#b05bd6', '#fff4d6'], 'cloth', rnd, false, 'tailor');
   vendorAt(ts.x, ts.z, ts.rot, rnd, { shirt: '#b05bd6', tie: '#ffd23f' });
   shopSign(ts, 'TAILOR');
   register({ ...front(ts), r: 2.2, label: () => 'Change outfit', use: () => openTailor() });
 
   // Coconut stand (heals).
   const cs = spots[7];
-  stall(b, cs.x, cs.z, cs.rot, ['#3f9e4f', '#fff4d6'], 'fruit', rnd, false);
+  stall(b, cs.x, cs.z, cs.rot, ['#3f9e4f', '#fff4d6'], 'fruit', rnd, false, 'coconut');
   vendorAt(cs.x, cs.z, cs.rot, rnd, { shirt: '#3f9e4f' });
   shopSign(cs, 'COCONUTS');
   register({ ...front(cs), r: 2.2, label: () => 'Buy coconut water ($5, +1 heart)', use: () => buyCoconut() });

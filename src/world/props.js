@@ -184,8 +184,13 @@ export function lighthouse(b, x, z) {
   addCircle(x, z, 1.4, { h: 9 });
 }
 
-export function stall(b, x, z, rot, awning = ['#d9412b', '#fff4d6'], goods = 'fruit', rnd = Math.random, useModel = true) {
-  if (useModel && place('stall', x, 0, z, rot)) { const fp = footprint('stall'); addBox(x, z, fp.hx * 0.85, fp.hz * 0.6, rot, { sight: false, h: 1.2 }); return; }
+/** Market stall. Uses the shop's own generated model (stall_<kind>) when loaded, else the generic one,
+ *  else primitives. Returns true when a model was placed. */
+export function stall(b, x, z, rot, awning = ['#d9412b', '#fff4d6'], goods = 'fruit', rnd = Math.random, useModel = true, kind = goods) {
+  const own = 'stall_' + kind;
+  for (const name of [own, useModel ? 'stall' : null]) {
+    if (name && place(name, x, 0, z, rot + (MODEL_ROT[name] || 0))) { const fp = footprint(name); addBox(x, z, fp.hx * 0.8, fp.hz * 0.6, rot, { sight: false, h: 1.2 }); return true; }
+  }
   const t = new Xf(b, x, z, rot);
   const w = 3, d = 2;
   for (const [px, pz] of [[-1.4, -0.9], [1.4, -0.9], [-1.4, 0.9], [1.4, 0.9]]) t.box(px, 0, pz, 0.12, 2.4, 0.12, P.woodDark);
@@ -202,6 +207,9 @@ export function stall(b, x, z, rot, awning = ['#d9412b', '#fff4d6'], goods = 'fr
   addBox(...t.w(0, 0.55), w / 2, 0.4, rot, { sight: false, h: 1 });
   addBox(...t.w(0, -0.6), (w - 0.2) / 2, 0.3, rot, { sight: false, h: 0.6 });
 }
+
+/** Extra yaw per stall model so its counter faces the plaza (generated models face different ways). */
+export const MODEL_ROT = {};
 
 export function boat(b, x, z, rot, color = '#2f6d94') {
   if (place('boat', x, -0.25, z, rot)) return;
