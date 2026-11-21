@@ -1,8 +1,8 @@
-﻿<p align="center">
+<p align="center">
   <img src="docs/img/i_wide.png" alt="Isla Corrupta" width="100%" />
 </p>
 
-<h1 align="center">ðŸŒ´ COUP D'ETAT, BABY! ðŸŒ´</h1>
+<h1 align="center">🌴 COUP D'ETAT, BABY! 🌴</h1>
 
 <p align="center">
   <b>Shipwrecked. Broke. Running for president.</b><br/>
@@ -18,7 +18,7 @@
 
 ---
 
-## ðŸï¸ The pitch
+## 🏝️ The pitch
 
 You wash up on **Isla Corrupta** with one flip-flop. Five officials run the island. Find their secrets, blackmail them, and win the presidency with **102% of the vote**.
 
@@ -26,40 +26,34 @@ You wash up on **Isla Corrupta** with one flip-flop. Five officials run the isla
   <img src="docs/img/intro1.png" alt="Shipwreck arrival" width="80%" />
 </p>
 
-## ðŸŽ¯ Your route
+## 🎯 Your route
 
-| ðŸ–ï¸ Start | ðŸ•µï¸ Escalate | ðŸ‘‘ Win |
+| 🏖️ Start | 🕵️ Escalate | 👑 Win |
 | :---: | :---: | :---: |
 | Loot the wreckage, reach the market | Hijack the DMV, Sanitation, Tax Office and State TV | Take the Palace |
 
-## ðŸŽ® How it plays
+## 🎮 How it plays
 
 | Step | What you do |
 | :---: | --- |
-| ðŸ” | Search wreckage, safes and desks for cash |
-| ðŸ¥· | Sneak past guards, hide, climb or take them down |
-| ðŸ›’ | Buy ever-sillier weapons at the market |
-| ðŸ“‚ | Reach the top floor and steal the secret dossier |
-| ðŸ¤ | Blackmail the official and collect their endorsement |
+| 🔍 | Search wreckage, safes and desks for cash |
+| 🥷 | Sneak past guards, hide, climb or take them down |
+| 🛒 | Buy ever-sillier weapons at the market |
+| 📂 | Reach the top floor and steal the secret dossier |
+| 🤝 | Blackmail the official and collect their endorsement |
 
 <table>
   <tr>
-    <td align="center"><img src="docs/img/beach.png" alt="The beach" /><br/><b>ðŸ–ï¸ The beach</b></td>
-    <td align="center"><img src="docs/img/market.png" alt="The market" /><br/><b>ðŸ›ï¸ The market</b></td>
+    <td align="center"><img src="docs/img/beach.png" alt="The beach" /><br/><b>🏖️ The beach</b></td>
+    <td align="center"><img src="docs/img/market.png" alt="The market" /><br/><b>🛍️ The market</b></td>
   </tr>
   <tr>
-    <td align="center"><img src="docs/img/sanitation.png" alt="Sanitation Department" /><br/><b>ðŸ—‘ï¸ Sanitation Dept.</b></td>
-    <td align="center"><img src="docs/img/map.png" alt="Island map" /><br/><b>ðŸ—ºï¸ Island map (press M)</b></td>
+    <td align="center"><img src="docs/img/sanitation.png" alt="Sanitation Department" /><br/><b>🗑️ Sanitation Dept.</b></td>
+    <td align="center"><img src="docs/img/map.png" alt="Island map" /><br/><b>🗺️ Island map (press M)</b></td>
   </tr>
 </table>
 
-## âœ¨ Highlights
-
-| ðŸ¥· Stealth | ðŸ¥Š Combat | ðŸ—³ï¸ Politics | ðŸŽµ Atmosphere |
-| :---: | :---: | :---: | :---: |
-| Patrols, detection meters, hiding spots | Melee, takedowns, rubber chickens | Dossiers, banners, clout | Storms, crowds, music |
-
-## ðŸ•¹ï¸ Controls
+## 🕹️ Controls
 
 | Key | Action | Key | Action |
 | :---: | --- | :---: | --- |
@@ -68,17 +62,17 @@ You wash up on **Isla Corrupta** with one flip-flop. Five officials run the isla
 | `C` | Crouch | `M` | Island map |
 | `Space` | Climb | `N` | Mute |
 
-## ðŸ“¸ Gallery
+## 📸 Gallery
 
 <table>
   <tr>
-    <td align="center"><img src="docs/img/sec.png" alt="Secret found" /><br/><b>ðŸ“‚ Secret found</b></td>
-    <td align="center"><img src="docs/img/bm.png" alt="Blackmail" /><br/><b>ðŸ¤ Blackmail</b></td>
-    <td align="center"><img src="docs/img/fin.png" alt="Election finale" /><br/><b>ðŸ† Election finale</b></td>
+    <td align="center"><img src="docs/img/sec.png" alt="Secret found" /><br/><b>📂 Secret found</b></td>
+    <td align="center"><img src="docs/img/bm.png" alt="Blackmail" /><br/><b>🤝 Blackmail</b></td>
+    <td align="center"><img src="docs/img/fin.png" alt="Election finale" /><br/><b>🏆 Election finale</b></td>
   </tr>
 </table>
 
-## ðŸš€ Play locally
+## 🚀 Play locally
 
 ```bash
 npm install
