@@ -2,7 +2,7 @@
   <img src="docs/img/i_wide.png" alt="Isla Corrupta" width="100%" />
 </p>
 
-<h1 align="center">🌴 COUP D'ETAT, BABY! 🌴</h1>
+<h1 align="center"> COUP D'ETAT, BABY! </h1>
 
 <p align="center">
   <b>Shipwrecked. Broke. Running for president.</b><br/>
@@ -18,7 +18,7 @@
 
 ---
 
-## 🏝️ The pitch
+##  The pitch
 
 You wash up on **Isla Corrupta** with one flip-flop. Five officials run the island. Find their secrets, blackmail them, and win the presidency with **102% of the vote**.
 
@@ -26,21 +26,21 @@ You wash up on **Isla Corrupta** with one flip-flop. Five officials run the isla
   <img src="docs/img/intro1.png" alt="Shipwreck arrival" width="80%" />
 </p>
 
-## 🎯 Your route
+##  Your route
 
-| 🏖️ Start | 🕵️ Escalate | 👑 Win |
+|  Start |  Escalate |  Win |
 | :---: | :---: | :---: |
 | Loot the wreckage, reach the market | Hijack the DMV, Sanitation, Tax Office and State TV | Take the Palace |
 
-## 🎮 How it plays
+##  How it plays
 
-| Step | What you do |
-| :---: | --- |
-| 🔍 | Search wreckage, safes and desks for cash |
-| 🥷 | Sneak past guards, hide, climb or take them down |
-| 🛒 | Buy ever-sillier weapons at the market |
-| 📂 | Reach the top floor and steal the secret dossier |
-| 🤝 | Blackmail the official and collect their endorsement |
+|What you do |
+| --- |
+| Search wreckage, safes and desks for cash |
+| Sneak past guards, hide, climb or take them down |
+| Buy ever-sillier weapons at the market |
+| Reach the top floor and steal the secret dossier |
+| Blackmail the official and collect their endorsement |
 
 <table>
   <tr>
@@ -53,7 +53,7 @@ You wash up on **Isla Corrupta** with one flip-flop. Five officials run the isla
   </tr>
 </table>
 
-## 🕹️ Controls
+## Controls
 
 | Key | Action | Key | Action |
 | :---: | --- | :---: | --- |
@@ -62,7 +62,7 @@ You wash up on **Isla Corrupta** with one flip-flop. Five officials run the isla
 | `C` | Crouch | `M` | Island map |
 | `Space` | Climb | `N` | Mute |
 
-## 📸 Gallery
+## Gallery
 
 <table>
   <tr>
@@ -72,7 +72,7 @@ You wash up on **Isla Corrupta** with one flip-flop. Five officials run the isla
   </tr>
 </table>
 
-## 🚀 Play locally
+##  Play locally
 
 ```bash
 npm install
