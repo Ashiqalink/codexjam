@@ -26,6 +26,8 @@ addEventListener('error', (e) => showErr(e.message + ' @ ' + (e.filename || '').
 addEventListener('unhandledrejection', (e) => showErr('Promise: ' + (e.reason?.stack || e.reason)));
 
 async function boot() {
+  const versionEl = document.getElementById('version');
+  if (versionEl) versionEl.textContent = 'v' + __APP_VERSION__;
   for (const k of ['hemi', 'sun', 'fill']) if (G.debug.has(k)) CFG[k] = Number(G.debug.get(k));
   const renderer = new THREE.WebGPURenderer({ antialias: true });
   renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
@@ -147,8 +149,10 @@ async function boot() {
 function debugStart(wreck) {
   const d = G.debug;
   const title = document.getElementById('title');
+  const howto = document.getElementById('howto');
   const start = () => {
     title.classList.add('hidden');
+    howto.classList.add('hidden');
     G.started = true;
   };
 
@@ -233,9 +237,13 @@ function debugStart(wreck) {
     return;
   }
 
-  // Normal start: click the title, then the intro plays.
+  // Normal start: click the title, read the how-to-play card, then the intro plays.
   G.rig.snap(...LAYOUT.spawn.flatMap((v, i) => (i === 0 ? [v, 0] : [v])));
   title.addEventListener('click', () => {
+    title.classList.add('hidden');
+    howto.classList.remove('hidden');
+  }, { once: true });
+  howto.addEventListener('click', () => {
     start();
     G.cine.play(introSequence());
   }, { once: true });

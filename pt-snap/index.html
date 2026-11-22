@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Coup d'État, Baby!</title>
+<link rel="stylesheet" href="./src/style.css" />
+</head>
+<body>
+  <div id="app"></div>
+
+  <!-- HUD: campaign-poster style -->
+  <div id="hud" class="hidden">
+    <div id="clout" class="sticker tilt-l">
+      <div class="label">VOTE-O-METER</div>
+      <div class="thermo"><div id="clout-fill"></div><div class="mark" style="left:80%"></div></div>
+      <div id="clout-num">0%</div>
+    </div>
+    <div id="wallet" class="sticker tilt-r">
+      <div class="label">SOGGY WALLET</div>
+      <div id="cash">$0</div>
+    </div>
+    <div id="hearts" class="sticker tilt-l"></div>
+    <div id="weapon" class="sticker tilt-r"><span class="label">ARMED WITH</span><span id="weapon-name">Bare Fists</span></div>
+    <div id="objective" class="note"><span class="label">TO DO</span><span id="objective-text"></span></div>
+    <div id="prompt" class="stamp hidden"></div>
+    <div id="hold" class="hidden"><div id="hold-fill"></div></div>
+    <div id="toast" class="sticker hidden"></div>
+    <div id="ticker" class="hidden"><span class="tag">STATE NEWS</span><span id="ticker-text"></span></div>
+    <div id="hint" class="hidden"></div>
+  </div>
+
+  <!-- World-space markers (sweat drop, guard alerts) -->
+  <div id="markers"></div>
+
+  <!-- Shop menu -->
+  <div id="shop" class="hidden">
+    <div class="shop-title" id="shop-title">SHOP</div>
+    <div id="shop-items"></div>
+    <div class="shop-foot">Press the number to buy. E or Esc to leave.</div>
+  </div>
+
+  <!-- Cinematic layer -->
+  <div id="bar-top" class="bar"></div>
+  <div id="bar-bottom" class="bar"></div>
+  <div id="caption"></div>
+  <div id="skip" class="hidden">ANY KEY TO SKIP</div>
+  <div id="fade"></div>
+  <div id="endcard" class="hidden">
+    <div class="end-title">COUP D&#39;&Eacute;TAT, BABY!</div>
+    <div class="end-sub">THE END</div>
+    <div class="end-line">You came with nothing. You took everything. You changed nothing.</div>
+    <div id="end-stats"></div>
+    <div class="end-hint">ENTER to keep governing  ·  reload to wash up again</div>
+  </div>
+
+  <!-- Title -->
+  <div id="title">
+    <div class="title-main">COUP D'ÉTAT,<br/>BABY!</div>
+    <div class="title-sub">A campaign of crime, lies and paperwork</div>
+    <div class="title-start">CLICK TO START</div>
+    <div class="title-keys">WASD move · SHIFT sprint · C crouch · SPACE climb · CLICK / F attack · E interact</div>
+  </div>
+
+  <div id="err"></div>
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>

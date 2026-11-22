@@ -20,5 +20,8 @@ tools/fetch_models.mjs
 DESIGN.md
 CINEMATICS.md
 dist-pt/
+release/
+shots/pack/
+shots/pack-smoke/
 *.md
 !README.md

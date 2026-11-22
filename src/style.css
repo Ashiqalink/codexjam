@@ -123,7 +123,51 @@ body.cine #hud, body.cine #markers { display: none; }
 .title-sub { margin-top: 3vh; color: var(--paper); font-size: 2.2vh; text-shadow: 2px 2px 0 var(--ink); }
 .title-start { margin-top: 5vh; background: var(--red); color: var(--paper); padding: 1vh 3vh; border: 4px solid var(--ink); border-radius: 8px; font-size: 2.6vh; transform: rotate(2deg); animation: pulse 1.2s ease-in-out infinite; }
 .title-keys { position: absolute; bottom: 4vh; color: var(--paper); font-size: 1.6vh; text-shadow: 2px 2px 0 var(--ink); }
+.title-version { position: absolute; left: 2vw; bottom: 2vh; color: var(--paper); opacity: 0.65; font-size: 1.5vh; letter-spacing: 0.08em; text-shadow: 2px 2px 0 var(--ink); }
 @keyframes pulse { 50% { transform: rotate(2deg) scale(1.06); } }
+
+/* ---------- How to play ---------- */
+#howto {
+  position: fixed; inset: 0; z-index: 21; display: flex; align-items: center; justify-content: center;
+  padding: 2vh 2vw; cursor: pointer; font-family: var(--font);
+  background: radial-gradient(circle at 50% 35%, rgba(47, 109, 148, 0.5), rgba(0, 0, 0, 0.82));
+  backdrop-filter: blur(3px);
+}
+.howto-card {
+  width: auto; max-width: 94vw; max-height: 94vh; overflow: auto;
+  padding: 2vh 2.2vw 2.2vh; display: flex; flex-direction: column; gap: 1.4vh;
+  color: var(--paper); border: 5px solid var(--ink); border-radius: 14px;
+  background: linear-gradient(160deg, rgba(42, 26, 18, 0.94), rgba(22, 16, 24, 0.96));
+  box-shadow: 10px 12px 0 rgba(0, 0, 0, 0.5), inset 0 0 0 3px rgba(255, 210, 63, 0.18);
+}
+.howto-head { text-align: center; }
+.howto-title {
+  font-size: 4.6vh; line-height: 1; color: var(--yellow); letter-spacing: 0.04em; transform: rotate(-1.5deg);
+  text-shadow: 0 0.5vh 0 var(--red), 0 0.9vh 0 var(--ink);
+}
+.howto-sub { margin-top: 0.8vh; font-size: 1.8vh; color: var(--paper); opacity: 0.85; letter-spacing: 0.06em; }
+.howto-grid { display: grid; grid-template-columns: repeat(2, auto); justify-content: center; gap: 1.4vh 1.2vw; }
+.howto-grid figure { position: relative; margin: 0; border: 4px solid var(--ink); border-radius: 10px; overflow: hidden; background: #000; }
+.howto-grid img { display: block; height: 28vh; max-width: 44vw; aspect-ratio: 16 / 9; object-fit: cover; }
+.howto-grid figcaption {
+  position: absolute; left: 0; bottom: 0; right: 0; display: flex; align-items: center; gap: 0.8vw;
+  padding: 1vh 1vw; font-size: 2.1vh; color: var(--ink);
+  background: linear-gradient(180deg, rgba(255, 244, 214, 0), rgba(255, 244, 214, 0.95) 45%);
+}
+.howto-grid figcaption b {
+  display: inline-grid; place-items: center; width: 3.4vh; height: 3.4vh; flex: none;
+  background: var(--red); color: var(--paper); border-radius: 50%; font-size: 2vh;
+}
+.howto-keys { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.6vh 1.6vw; font-size: 1.7vh; opacity: 0.9; }
+.howto-keys kbd {
+  display: inline-block; padding: 0.3vh 0.7vw; margin-right: 0.3vw; font-family: inherit; font-size: 1.6vh;
+  color: var(--ink); background: var(--paper); border: 2px solid var(--ink); border-radius: 5px; box-shadow: 0 3px 0 rgba(0, 0, 0, 0.45);
+}
+.howto-go {
+  align-self: center; padding: 1.2vh 4vw; font-size: 2.8vh; color: var(--paper);
+  background: var(--red); border: 4px solid var(--ink); border-radius: 8px; transform: rotate(1.5deg);
+  animation: pulse 1.4s ease-in-out infinite;
+}
 
 #err { position: fixed; left: 10px; bottom: 10px; right: 10px; color: #ff6b6b; font: 14px monospace; white-space: pre-wrap; z-index: 99; pointer-events: none; }
 

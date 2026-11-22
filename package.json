@@ -1,12 +1,20 @@
 {
-  "name": "jam-workspace",
+  "name": "coup-detat-baby",
   "private": true,
-  "version": "0.1.0",
+  "version": "1.0.1",
+  "description": "A low-poly stealth-brawler about blackmail, baguettes and one very dirty election.",
+  "author": "Ashiqalink",
   "type": "module",
+  "main": "electron/main.cjs",
   "scripts": {
     "dev": "vite --host --port 5173",
     "build": "vite build",
-    "preview": "vite preview --host --port 5173"
+    "preview": "vite preview --host --port 5173",
+    "app": "npm run build && electron .",
+    "pack:win": "npm run build && node tools/package.mjs win",
+    "pack:linux": "npm run build && node tools/package.mjs linux && node tools/fix_zip_modes.mjs",
+    "pack:mac": "npm run build && node tools/package.mjs mac",
+    "pack:itch": "npm run build && node tools/itch_zip.mjs"
   },
   "dependencies": {
     "three": "^0.187.0"
@@ -15,8 +23,67 @@
     "@gltf-transform/core": "^4.5.1",
     "@gltf-transform/extensions": "^4.5.1",
     "@gltf-transform/functions": "^4.5.1",
+    "electron": "^45.4.1",
+    "electron-builder": "^26.18.0",
     "puppeteer-core": "^25.18.1",
     "sharp": "^0.35.5",
-    "vite": "^8.3.8"
+    "vite": "^8.3.8",
+    "yazl": "^3.3.1"
+  },
+  "build": {
+    "appId": "io.github.ashiqalink.coupdetatbaby",
+    "productName": "Coup d'Etat Baby",
+    "artifactName": "CoupDetatBaby-${version}-${os}-${arch}.${ext}",
+    "directories": {
+      "output": "release",
+      "buildResources": "electron"
+    },
+    "files": [
+      "dist/**/*",
+      "electron/main.cjs",
+      "package.json"
+    ],
+    "win": {
+      "icon": "electron/icon.png",
+      "target": [
+        {
+          "target": "zip",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "linux": {
+      "icon": "electron/icon.png",
+      "category": "Game",
+      "target": [
+        {
+          "target": "zip",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "mac": {
+      "icon": "electron/icon.png",
+      "category": "public.app-category.games",
+      "target": [
+        {
+          "target": "zip",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        }
+      ]
+    }
   }
 }

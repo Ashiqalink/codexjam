@@ -84,3 +84,44 @@ Then open `http://localhost:5173`.
 ---
 
 <p align="center"><sub>Made for a 12-hour game jam. No officials were harmed. Several were blackmailed.</sub></p>
+
+## Build
+
+| Command | Output |
+| --- | --- |
+| `npm run pack:itch` | `release/CoupDetatBaby-<version>-itch-html5.zip` (upload as an HTML game) |
+| `npm run pack:win` | Windows zip + portable `.exe` |
+| `npm run pack:linux` | Linux zip |
+| `npm run pack:mac` | macOS zip (run on a Mac) |
+
+Push a `v*` tag to build Windows, Linux and macOS packages in CI (`.github/workflows/desktop.yml`).
+
+## Versioning and releases
+
+The version lives in `package.json` and is the single source of truth. It is
+injected into the game at build time (`vite.config.js`) and shown on the title
+screen, and it is used in the itch.io and desktop artifact filenames.
+
+Releases follow [Semantic Versioning](https://semver.org/) and are tracked in
+[`CHANGELOG.md`](CHANGELOG.md):
+
+| Change | Command |
+| --- | --- |
+| Bug fix / polish | `npm version patch` |
+| New content or feature | `npm version minor` |
+| Breaking change | `npm version major` |
+
+`npm version <level>` bumps `package.json` + `package-lock.json`, commits them,
+and creates the matching `v<version>` git tag. Push both the commit and the tag:
+
+```bash
+git push
+git push --tags
+```
+
+The tag triggers the desktop workflow and attaches the built packages to a
+GitHub release. For itch.io, run `npm run pack:itch` after the bump and upload
+the resulting zip with **This file will be played in the browser** ticked.
+
+Note: `npm version` creates a commit, so commit your gameplay changes first.
+

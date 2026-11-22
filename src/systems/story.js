@@ -191,8 +191,13 @@ function blackmailScene(b) {
   const wasKO = off.down;
   G.state.hijacked[id] = true;
   G.state.clout = Math.min(100, G.state.clout + s.clout);
-  // The building stands down: staff now report to you.
-  for (const g of G.guards) if (g.bld === b && !g.down) { g.state = 'down'; g.pose = 'slump'; }
+  // The building stands down: staff now report to you. They keep patrolling
+  // (so they don't freeze in place) but stop seeing or chasing the player.
+  for (const g of G.guards) {
+    if (g === off || g.bld !== b || g.down) continue;
+    g.stoodDown = true;
+    g.state = 'patrol'; g.meter = 0; g.last = null; g.windup = 0; g.pose = null;
+  }
   off.state = 'down'; off.pose = 'slump';
   const sign = signMesh('VOTE THE NOBODY', 1.1, 0.5, { bg: '#d9412b', fg: '#ffd23f', border: '#ffd23f' });
   sign.position.set(0, 1.15, 0.5);

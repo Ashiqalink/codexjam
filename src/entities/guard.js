@@ -26,8 +26,12 @@ export class Guard {
     this.hp = o.hp ?? CFG.guard.hp;
     this.cash = o.cash ?? (10 + Math.floor(Math.random() * 16));
     this.state = 'patrol';
+    // Set once the building is hijacked: the guard keeps walking its route but
+    // ignores the player instead of freezing in the down/slump pose forever.
+    this.stoodDown = false;
     this.meter = 0; this.lost = 0; this.cd = 0; this.windup = 0; this.stun = 0;
     this.last = null; this.phase = Math.random() * 6; this.move = 0; this.t = 0;
+    this.stuckT = 0; this.lastX = o.x; this.lastZ = o.z;
     this.pose = null; this.hitFlash = 0;
     this.speedMult = this.kind === 'official' ? 0.8 : 1;
 
@@ -61,7 +65,7 @@ export class Guard {
   }
 
   canSee(p) {
-    if (p.hidden || !this.sameSpace(p)) return false;
+    if (this.stoodDown || p.hidden || !this.sameSpace(p)) return false;
     const dx = p.x - this.x, dz = p.z - this.z;
     const d = Math.hypot(dx, dz);
     if (d > this.viewRange(p)) return false;
@@ -71,7 +75,7 @@ export class Guard {
   }
 
   alert(p, shout = true) {
-    if (this.down) return;
+    if (this.down || this.stoodDown) return;
     const was = this.state === 'alert';
     this.state = 'alert'; this.meter = 1; this.lost = 0;
     this.last = { x: p.x, z: p.z };
@@ -84,7 +88,7 @@ export class Guard {
   }
 
   hear(x, z) {
-    if (this.down || this.state === 'alert') return;
+    if (this.down || this.stoodDown || this.state === 'alert') return;
     this.state = 'sus';
     this.last = { x, z };
     this.meter = Math.max(this.meter, 0.35);
@@ -128,6 +132,9 @@ export class Guard {
     const p = G.player;
     if (this.hitFlash > 0) this.hitFlash -= dt;
     if (this.down) { this.render(); return; }
+    if (this.stoodDown && this.state !== 'patrol') {
+      this.state = 'patrol'; this.meter = 0; this.last = null; this.windup = 0;
+    }
     if (this.stun > 0) { this.stun -= dt; this.move = 0; this.render(); return; }
 
     const sees = this.canSee(p);
@@ -196,10 +203,23 @@ export class Guard {
       return;
     }
     const [tx, tz] = this.route[this.ri];
-    if (this.moveTo(tx, tz, CFG.guard.patrolSpeed, dt)) {
+    const arrived = this.moveTo(tx, tz, CFG.guard.patrolSpeed, dt);
+    // If furniture or a wall blocks the leg, move on to the next waypoint
+    // instead of pressing into it forever.
+    const moved = Math.hypot(this.x - this.lastX, this.z - this.lastZ);
+    this.lastX = this.x; this.lastZ = this.z;
+    if (arrived) {
+      this.stuckT = 0;
       this.ri = (this.ri + 1) % this.route.length;
       this.wait = this.waitAt;
-    }
+    } else if (moved < 0.02) {
+      this.stuckT += dt;
+      if (this.stuckT > 1.2) {
+        this.stuckT = 0;
+        this.ri = (this.ri + 1) % this.route.length;
+        this.wait = Math.min(this.waitAt, 0.6);
+      }
+    } else this.stuckT = 0;
   }
 
   render() {
@@ -213,7 +233,7 @@ export class Guard {
     const vis = this.isVisible();
     m.visible = vis;
     const p = G.player;
-    const showCone = vis && !this.down && !G.cine?.active && this.sameSpace(p);
+    const showCone = vis && !this.down && !this.stoodDown && !G.cine?.active && this.sameSpace(p);
     this.cone.visible = showCone;
     if (showCone) {
       const r = this.viewRange(p);
@@ -230,7 +250,7 @@ export class Guard {
   }
 
   updateMarker(cam, w, h) {
-    const show = this.isVisible() && !this.down && !G.cine?.active && (this.state === 'alert' || this.state === 'sus');
+    const show = this.isVisible() && !this.down && !this.stoodDown && !G.cine?.active && (this.state === 'alert' || this.state === 'sus');
     if (!show) { this.marker.style.display = 'none'; return; }
     const v = new THREE.Vector3(this.x, this.y + 2.3, this.z).project(cam);
     this.marker.style.display = 'block';
@@ -245,5 +265,6 @@ export class Guard {
     if (this.down) return;
     this.state = 'patrol'; this.meter = 0; this.last = null; this.windup = 0; this.cd = 0;
     this.x = this.route[0][0]; this.z = this.route[0][1]; this.ri = 0;
+    this.stuckT = 0; this.lastX = this.x; this.lastZ = this.z;
   }
 }
